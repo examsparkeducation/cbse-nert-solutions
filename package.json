@@ -1,0 +1,8 @@
+{
+  "name": "qspark-ai",
+  "version": "1.0.0",
+  "description": "AI-powered question generator for students built with HTML, Tailwind CSS, vanilla JS, and serverless functions.",
+  "scripts": {
+    "dev:vercel": "vercel dev"
+  }
+}

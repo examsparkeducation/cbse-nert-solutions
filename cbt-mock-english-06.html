@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CUET CBT Mock Test English 06 | ExamSpark</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background-color: #f4f4f4; display: flex; flex-direction: column; height: 100vh; overflow: hidden; user-select: none; }
+        .cbt-header { background: #1e88e5; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 10; }
+        .cbt-header h1 { font-size: 1.2rem; }
+        .timer-box { font-size: 1.2rem; font-weight: bold; background: #e53935; padding: 5px 15px; border-radius: 4px; border: 2px solid white; }
+        .cbt-main { display: flex; flex: 1; overflow: hidden; }
+        .cbt-left { flex: 3; background: white; display: flex; flex-direction: column; border-right: 2px solid #ccc; }
+        .question-header { background: #f5f5f5; padding: 10px 20px; border-bottom: 1px solid #ddd; font-weight: bold; display: flex; justify-content: space-between; }
+        .question-content { padding: 25px; flex: 1; overflow-y: auto; font-size: 1.1rem; line-height: 1.6; }
+        .options-container { margin-top: 20px; }
+        .option-row { margin-bottom: 12px; display: flex; align-items: center; cursor: pointer; }
+        .option-row input { margin-right: 15px; transform: scale(1.3); cursor: pointer; }
+        .cbt-footer { background: #f5f5f5; padding: 15px 20px; border-top: 1px solid #ddd; display: flex; justify-content: space-between; }
+        .btn { padding: 10px 15px; border: 1px solid #ccc; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.95rem; }
+        .btn-mark { background: #fff; color: #333; border: 1px solid #888; }
+        .btn-clear { background: #fff; color: #333; border: 1px solid #888; margin-left: 10px; }
+        .btn-save { background: #2ecc71; color: white; border: none; float: right; padding: 10px 25px; }
+        .btn-save:hover { background: #27ae60; }
+        .cbt-right { flex: 1; background: #e3f2fd; display: flex; flex-direction: column; min-width: 300px; }
+        .candidate-profile { padding: 15px; text-align: center; border-bottom: 1px solid #bdc3c7; background: white; }
+        .candidate-profile img { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ccc; }
+        .palette-legend { padding: 15px; font-size: 0.85rem; background: white; border-bottom: 1px solid #ccc; }
+        .legend-item { display: inline-flex; align-items: center; margin-bottom: 8px; width: 45%; }
+        .legend-box { width: 25px; height: 25px; margin-right: 8px; border-radius: 4px; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 0.8rem; }
+        .status-not-visited { background: #e0e0e0; color: black; border: 1px solid #999; }
+        .status-not-answered { background: #e74c3c; } 
+        .status-answered { background: #2ecc71; } 
+        .status-marked { background: #9b59b6; } 
+        .status-answered-marked { background: #9b59b6; position: relative; }
+        .status-answered-marked::after { content: ''; position: absolute; bottom: 2px; right: 2px; width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; }
+        .palette-grid-container { padding: 15px; flex: 1; overflow-y: auto; }
+        .palette-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .grid-btn { width: 100%; aspect-ratio: 1; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1rem; color: white; }
+        .grid-btn.active { border: 3px solid #1e88e5; transform: scale(1.1); }
+        .submit-test-btn { width: 100%; padding: 15px; background: #34495e; color: white; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
+        .submit-test-btn:hover { background: #2c3e50; }
+    </style>
+</head>
+<body>
+
+    <header class="cbt-header">
+        <h1>ExamSpark CBT: English Mock 06</h1>
+        <div class="timer-box">Time Left: <span id="time-display">45:00</span></div>
+    </header>
+
+    <div class="cbt-main">
+        <div class="cbt-left">
+            <div class="question-header">
+                <span id="q-number-display">Question No. 1</span>
+                <span>Marks: +5, -1</span>
+            </div>
+            <div class="question-content">
+                <div id="q-text" style="font-weight: bold; margin-bottom: 20px; font-family: 'Times New Roman', Times, serif; font-size: 1.25rem;">Loading question...</div>
+                <div class="options-container" id="options-container" style="font-family: 'Times New Roman', Times, serif; font-size: 1.15rem;"></div>
+            </div>
+            <div class="cbt-footer">
+                <div>
+                    <button class="btn btn-mark" onclick="markForReview()">Mark for Review & Next</button>
+                    <button class="btn btn-clear" onclick="clearResponse()">Clear Response</button>
+                </div>
+                <button class="btn btn-save" onclick="saveAndNext()">Save & Next</button>
+            </div>
+        </div>
+
+        <div class="cbt-right">
+            <div class="candidate-profile">
+                <img src="https://via.placeholder.com/80" alt="Student">
+                <h3 style="margin-top: 10px; color: #333;">Lucky (Candidate)</h3>
+            </div>
+            <div class="palette-legend">
+                <div class="legend-item"><div class="legend-box status-not-visited">0</div> Not Visited</div>
+                <div class="legend-item"><div class="legend-box status-not-answered">0</div> Not Answered</div>
+                <div class="legend-item"><div class="legend-box status-answered">0</div> Answered</div>
+                <div class="legend-item"><div class="legend-box status-marked">0</div> Marked</div>
+            </div>
+            <div class="palette-grid-container">
+                <h4 style="margin-bottom: 10px; color: #555;">Question Palette</h4>
+                <div class="palette-grid" id="palette-grid"></div>
+            </div>
+            <button class="submit-test-btn" onclick="submitTest()">Submit Test</button>
+        </div>
+    </div>
+
+    <div id="auth-loading" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f4f7f6; z-index: 99999; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-weight: bold; color: #1e88e5; flex-direction: column;">
+        <span>⏳ Loading Test Environment...</span>
+        <span style="font-size: 1rem; color: #666; margin-top: 10px;">Please wait a moment</span>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        (function() {
+            let db;
+            try {
+                const firebaseConfig = {
+                    apiKey: "AIzaSyDl6BATbzjeZaMdnC8eBXbdMcj1ainGVEE",
+                    authDomain: "examspark-ca92a.firebaseapp.com",
+                    projectId: "examspark-ca92a",
+                    storageBucket: "examspark-ca92a.firebasestorage.app",
+                    messagingSenderId: "503360136413",
+                    appId: "1:503360136413:web:4676aa12cb47da06dd6734"
+                };
+                if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+                db = firebase.firestore();
+            } catch (e) { console.error("Firebase init fallback:", e); if (typeof window.db !== 'undefined') db = window.db; }
+
+            function startTestEnvironment(name, photo) {
+                const profileName = document.querySelector('.candidate-profile h3');
+                const profileImg = document.querySelector('.candidate-profile img');
+                if (profileName) profileName.innerText = name;
+                if (profileImg) {
+                    let fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1e88e5&color=fff&rounded=true&bold=true`;
+                    profileImg.src = photo || fallbackAvatar;
+                    profileImg.onerror = function() { this.src = fallbackAvatar; };
+                }
+                const checkInit = setInterval(() => {
+                    if (typeof window.init === "function") {
+                        clearInterval(checkInit);
+                        const loader = document.getElementById('auth-loading');
+                        if (loader) loader.style.display = "none";
+                        window.init(); 
+                    }
+                }, 100);
+            }
+
+            try {
+                firebase.auth().onAuthStateChanged((user) => {
+                    if (!user) {
+                        console.warn("Unauthenticated access attempt. Redirecting to login...");
+                        sessionStorage.setItem('returnPage', window.location.href);
+                        window.location.replace("login.html"); 
+                        return; 
+                    } 
+                    let finalName = "ExamSpark Scholar"; let finalPhoto = user.photoURL;
+                    if (user.displayName) { finalName = user.displayName; } 
+                    else if (user.phoneNumber) { finalName = user.phoneNumber.substring(0, 3) + " ******" + user.phoneNumber.substring(user.phoneNumber.length - 4); }
+                    
+                    if (db) {
+                        db.collection("users").doc(user.uid).get().then((doc) => {
+                            if (doc.exists) {
+                                const data = doc.data();
+                                if (data.displayName) finalName = data.displayName;
+                                if (data.photoURL) finalPhoto = data.photoURL;
+                            }
+                            startTestEnvironment(finalName, finalPhoto);
+                        }).catch(err => { startTestEnvironment(finalName, finalPhoto); });
+                    } else { startTestEnvironment(finalName, finalPhoto); }
+                });
+            } catch (error) { console.error("Auth Error:", error); }
+
+            setTimeout(() => {
+                const loader = document.getElementById('auth-loading');
+                if (loader && loader.style.display !== "none" && firebase.auth().currentUser) {
+                    startTestEnvironment(firebase.auth().currentUser.displayName || "ExamSpark Scholar", firebase.auth().currentUser.photoURL);
+                }
+            }, 4000);
+        })(); 
+    </script>
+
+    <script>
+        const questions = [
+            { id: 1, text: "Choose the most appropriate synonym for \"PERSPICACIOUS\":", options: ["Obscure", "Discerning", "Dull", "Benevolent"], answer: 1 },
+            { id: 2, text: "Choose the antonym for \"EBULLIENT\":", options: ["Enthusiastic", "Depressed", "Jovial", "Energetic"], answer: 1 },
+            { id: 3, text: "Find the correctly spelt word:", options: ["Onomatopoeia", "Onomatopoea", "Onomatopiea", "Onomatopieo"], answer: 0 },
+            { id: 4, text: "Identify the figure of speech: \"The silence was deafening during the eulogy.\"", options: ["Hyperbole", "Metaphor", "Oxymoron", "Litotes"], answer: 2 },
+            { id: 5, text: "Analogy: \"SOPORIFIC : SLEEP :: _____ : _____\"", options: ["Tonic : Weakness", "Vaccine : Disease", "Purgative : Cleansing", "Stimulant : Fatigue"], answer: 2 },
+            { id: 6, text: "Idiom: \"To play fast and loose\" means:", options: ["To play a game quickly", "To act in an unreliable and irresponsible way", "To lose one's temper", "To be extremely generous"], answer: 1 },
+            { id: 7, text: "One Word Substitution: \"A person who is recovered from illness\"", options: ["Convalescent", "Boorish", "Altruist", "Ascetic"], answer: 0 },
+            { id: 8, text: "Sentence Rearrangement:\nP: because of the heavy rain\nQ: the match was postponed\nR: although the players were ready\nS: to play in the field", options: ["PQRS", "RQSP", "RPQS", "SPRQ"], answer: 2 },
+            { id: 9, text: "Error Spotting: \"Neither the principal (A) / nor the teachers (B) / was in favor of the new policy (C) / No error (D).\"", options: ["A", "B", "C", "D"], answer: 2 },
+            { id: 10, text: "Active/Passive: \"The government is building a new bridge over the river.\"", options: ["A new bridge was being built by the government.", "A new bridge is being built by the government.", "A new bridge had been built by the government.", "The bridge is built by the government."], answer: 1 },
+            { id: 11, text: "Direct/Indirect: The teacher said to the students, \"Don't make a noise.\"", options: ["The teacher told the students not to make a noise.", "The teacher forbade the students from making a noise.", "The teacher said that don't make a noise.", "Both A and B."], answer: 3 },
+            { id: 12, text: "Choose the word that best fits the blank: \"The ______ details of the report were omitted for the sake of brevity.\"", options: ["Significant", "Superfluous", "Crucial", "Essential"], answer: 1 },
+            { id: 13, text: "Identify the figure of speech: \"The iron tongue of midnight hath told twelve.\"", options: ["Simile", "Personification", "Pun", "Synecdoche"], answer: 1 },
+            { id: 14, text: "One Word Substitution: \"Fear of closed spaces\"", options: ["Acrophobia", "Claustrophobia", "Agoraphobia", "Xenophobia"], answer: 1 },
+            { id: 15, text: "Antonym of \"CANDID\":", options: ["Frank", "Deceptive", "Sincere", "Honest"], answer: 1 },
+            { id: 16, text: "Select the correct meaning of the idiom: \"To have an axe to grind\"", options: ["To work hard for a goal", "To have a private reason for doing something", "To be very angry", "To fail in an exam"], answer: 1 },
+            { id: 17, text: "Rearrange the parts:\nP: into the room\nQ: without saying a word\nR: he walked\nS: and sat down", options: ["RPQS", "RQPS", "QRPS", "SPRQ"], answer: 1 },
+            { id: 18, text: "Find the wrongly spelt word:", options: ["Maintenance", "Questionnaire", "Millenium", "Occurrence"], answer: 2 },
+            { id: 19, text: "Active/Passive: \"Open the door.\"", options: ["Let the door be opened.", "The door should be opened.", "You are requested to open the door.", "All of the above."], answer: 3 },
+            { id: 20, text: "Error Spotting: \"I prefer (A) / coffee (B) / than tea (C) / No error (D).\"", options: ["A", "B", "C", "D"], answer: 2 },
+            { id: 21, text: "Select the correct synonym for \"QUERULOUS\":", options: ["Quiet", "Complaining", "Calm", "Brave"], answer: 1 },
+            { id: 22, text: "Figure of Speech: \"I have told you a thousand times.\"", options: ["Irony", "Hyperbole", "Metonymy", "Paradox"], answer: 1 },
+            { id: 23, text: "One Word Substitution: \"One who talks in sleep\"", options: ["Somnambulist", "Somniloquist", "Egoist", "Altruist"], answer: 1 },
+            { id: 24, text: "Idiom: \"To bell the cat\"", options: ["To be friendly with enemies", "To take the first step at personal risk", "To wear a bell", "To make a lot of noise"], answer: 1 },
+            { id: 25, text: "Choose the correct filler: \"He is ______ honest man.\"", options: ["A", "An", "The", "No article"], answer: 1 },
+            { id: 26, text: "Analogy: \"PENURIOUS : WEALTH :: _____ : _____\"", options: ["Generous : Money", "Ignorant : Knowledge", "Brave : Fear", "Hungry : Thirst"], answer: 1 },
+            { id: 27, text: "Spelling: Which one is correct?", options: ["Liaison", "Liason", "Liasion", "Liazon"], answer: 0 },
+            { id: 28, text: "Direct/Indirect: He said, \"Alas! I am undone.\"", options: ["He exclaimed sadly that he was undone.", "He said alas that he is undone.", "He exclaimed that he is undone.", "He cried out that I am undone."], answer: 0 },
+            { id: 29, text: "Find the synonym of \"GARRULOUS\":", options: ["Reserved", "Talkative", "Shy", "Silent"], answer: 1 },
+            { id: 30, text: "Error Spotting: \"Physics (A) / are (B) / my favorite subject (C) / No error (D).\"", options: ["A", "B", "C", "D"], answer: 1 },
+            { id: 31, text: "Identify the figure of speech: \"The world is a stage.\"", options: ["Simile", "Metaphor", "Apostrophe", "Onomatopoeia"], answer: 1 },
+            { id: 32, text: "Choose the correct meaning: \"Ab initio\"", options: ["From the beginning", "At the end", "In the middle", "Briefly"], answer: 0 },
+            { id: 33, text: "Select the correctly spelt word:", options: ["Privilege", "Privelege", "Priviledge", "Privelige"], answer: 0 },
+            { id: 34, text: "Fill in the blank: \"I have been living here ______ 2010.\"", options: ["For", "From", "Since", "By"], answer: 2 },
+            { id: 35, text: "One Word Substitution: \"A collection of poems\"", options: ["Anthology", "Dictionary", "Biography", "Bibliography"], answer: 0 },
+            { id: 36, text: "Rearrange the parts:\nP: is a great virtue\nQ: to forgive\nR: in a man\nS: our enemies", options: ["QSPR", "PQRS", "QSRP", "SQRP"], answer: 2 },
+            { id: 37, text: "Active/Passive: \"They will finish the work tomorrow.\"", options: ["The work will be finished by them tomorrow.", "The work would be finished tomorrow.", "Tomorrow the work will finished.", "The work is finished tomorrow."], answer: 0 },
+            { id: 38, text: "Synonym of \"PLACATE\":", options: ["Enrage", "Appease", "Provoke", "Irritate"], answer: 1 },
+            { id: 39, text: "Antonym of \"ALTRUISTIC\":", options: ["Selfless", "Selfish", "Kind", "Generous"], answer: 1 },
+            { id: 40, text: "Figure of Speech: \"The stars winked at us.\"", options: ["Simile", "Metaphor", "Personification", "Pun"], answer: 2 },
+            { id: 41, text: "Choose the correct meaning: \"En route\"", options: ["On the way", "At home", "Inside", "Far away"], answer: 0 },
+            { id: 42, text: "Error Spotting: \"He as well as his friends (A) / are going (B) / to the party (C) / No error (D).\"", options: ["A", "B", "C", "D"], answer: 1 },
+            { id: 43, text: "One Word Substitution: \"A speech delivered without preparation\"", options: ["Rhetoric", "Extempore", "Oration", "Maiden"], answer: 1 },
+            { id: 44, text: "Idiom: \"A piece of cake\"", options: ["A difficult task", "Something very easy", "A delicious dessert", "A small share"], answer: 1 },
+            { id: 45, text: "Fill in the blank: \"He died ______ cholera.\"", options: ["By", "From", "Of", "With"], answer: 2 },
+            { id: 46, text: "Select the correct meaning: \"Ex gratia\"", options: ["As a matter of right", "As a favor", "Against the law", "With heavy heart"], answer: 1 },
+            { id: 47, text: "Find the synonym of \"VILIFY\":", options: ["Praise", "Slander", "Adore", "Help"], answer: 1 },
+            { id: 48, text: "Identify the figure of speech: \"United we stand, divided we fall.\"", options: ["Antithesis", "Epigram", "Irony", "Litotes"], answer: 0 },
+            { id: 49, text: "Choose the correct spelling:", options: ["Hierarchy", "Heirarchy", "Hierarcy", "Heirarcy"], answer: 0 },
+            { id: 50, text: "Active/Passive: \"People say that the earth is round.\"", options: ["It is said that the earth is round.", "The earth is said to be round.", "Both A and B.", "None of the above."], answer: 2 }
+        ];
+
+        let currentQuestionIndex = 0;
+        let qStatus = new Array(questions.length).fill(0); 
+        let userAnswers = new Array(questions.length).fill(null);
+        let totalSeconds = 45 * 60; // 45 minutes for English Language
+        let timerInterval;
+
+        function startTimer() {
+            const timerDisplay = document.getElementById('time-display');
+            timerInterval = setInterval(() => {
+                if(totalSeconds <= 0) { 
+                    clearInterval(timerInterval); submitTest(); return;
+                }
+                totalSeconds--;
+                let m = Math.floor(totalSeconds / 60); let s = totalSeconds % 60;
+                timerDisplay.innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+            }, 1000);
+        }
+
+        function init() { renderPalette(); loadQuestion(0); updateLegendCounts(); startTimer(); }
+
+        function loadQuestion(index) {
+            if (qStatus[index] === 0) qStatus[index] = 1;
+            currentQuestionIndex = index;
+            document.getElementById('q-number-display').innerText = `Question No. ${index + 1}`;
+            document.getElementById('q-text').innerText = questions[index].text.replace(/\n/g, '<br>');
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            questions[index].options.forEach((opt, i) => {
+                const isChecked = userAnswers[index] === i ? 'checked' : '';
+                optionsContainer.innerHTML += `
+                    <label class="option-row" onclick="selectOption(${i})">
+                        <input type="radio" name="opt" id="opt${i}" value="${i}" ${isChecked}>
+                        <span>${opt}</span>
+                    </label>
+                `;
+            });
+            renderPalette(); updateLegendCounts();
+        }
+
+        function selectOption(optIndex) {
+            userAnswers[currentQuestionIndex] = optIndex;
+            if(qStatus[currentQuestionIndex] === 3 || qStatus[currentQuestionIndex] === 4) { qStatus[currentQuestionIndex] = 4; } 
+            else { qStatus[currentQuestionIndex] = 2; }
+            document.getElementById(`opt${optIndex}`).checked = true;
+            renderPalette(); updateLegendCounts();
+        }
+
+        function saveAndNext() {
+            if (userAnswers[currentQuestionIndex] === null) { qStatus[currentQuestionIndex] = 1; } 
+            else { qStatus[currentQuestionIndex] = 2; }
+            if (currentQuestionIndex < questions.length - 1) { loadQuestion(currentQuestionIndex + 1); } 
+            else { renderPalette(); updateLegendCounts(); }
+        }
+
+        function markForReview() {
+            if (userAnswers[currentQuestionIndex] !== null) { qStatus[currentQuestionIndex] = 4; } 
+            else { qStatus[currentQuestionIndex] = 3; }
+            if (currentQuestionIndex < questions.length - 1) { loadQuestion(currentQuestionIndex + 1); } 
+            else { renderPalette(); updateLegendCounts(); }
+        }
+
+        function clearResponse() {
+            userAnswers[currentQuestionIndex] = null; qStatus[currentQuestionIndex] = 1;
+            const radios = document.getElementsByName('opt');
+            radios.forEach(r => r.checked = false);
+            renderPalette(); updateLegendCounts();
+        }
+
+        function renderPalette() {
+            const grid = document.getElementById('palette-grid');
+            grid.innerHTML = '';
+            questions.forEach((q, index) => {
+                let btn = document.createElement('button');
+                btn.className = `grid-btn ${getStatusClass(qStatus[index])}`;
+                btn.innerText = index + 1;
+                btn.onclick = () => loadQuestion(index);
+                if(index === currentQuestionIndex) btn.classList.add('active');
+                grid.appendChild(btn);
+            });
+        }
+
+        function getStatusClass(status) {
+            if(status === 0) return 'status-not-visited';
+            if(status === 1) return 'status-not-answered';
+            if(status === 2) return 'status-answered';
+            if(status === 3) return 'status-marked';
+            if(status === 4) return 'status-answered-marked';
+            return 'status-not-visited';
+        }
+
+       function updateLegendCounts() {
+            const counts = [0,0,0,0];
+            qStatus.forEach(s => {
+                if(s===0) counts[0]++; if(s===1) counts[1]++;
+                if(s===2 || s===4) counts[2]++; if(s===3 || s===4) counts[3]++;
+            });
+            const legendBoxes = document.querySelectorAll('.legend-box');
+            legendBoxes[0].innerText = counts[0]; legendBoxes[1].innerText = counts[1];
+            legendBoxes[2].innerText = counts[2]; legendBoxes[3].innerText = counts[3];
+        }
+
+        function submitTest() {
+            let correct = 0, wrong = 0, unattempted = 0, score = 0;
+            questions.forEach((q, index) => {
+                if (userAnswers[index] === null) unattempted++;
+                else if (userAnswers[index] === q.answer) { correct++; score += 5; } 
+                else { wrong++; score -= 1; }
+            });
+            const resultData = { totalQuestions: questions.length, correct: correct, wrong: wrong, unattempted: unattempted, score: score, maxScore: questions.length * 5, solutionUrl: 'eng-mock6-solutions.html', subject: "English Language" };
+            localStorage.setItem('cuetMockAnswers', JSON.stringify(userAnswers));
+            localStorage.setItem('cuetMockResult', JSON.stringify(resultData));
+            window.location.href = 'cuet-scorecard.html';
+        }
+
+        window.onload = function() { setTimeout(() => { if (typeof init === "function") { init(); } }, 500); };
+    </script>
+</body>
+</html>

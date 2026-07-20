@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CUET Mock Test Generator | QSpark AI</title>
+    <meta name="description" content="Generate highly probable 50-MCQ mock tests for CUET UG/PG in seconds with QSpark AI." />
+    <meta name="theme-color" content="#f4efe4" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: { heading: ["Space Grotesk", "sans-serif"], body: ["Manrope", "sans-serif"] },
+            colors: { base: "#f4efe4", ink: "#1d2733", accent: "#ff7a59", mint: "#9fe7d6", sand: "#fff8ec" },
+            boxShadow: { soft: "0 18px 40px rgba(29, 39, 51, 0.12)" },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="min-h-screen bg-base font-body text-ink antialiased transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+    <div class="pointer-events-none fixed inset-0 overflow-hidden">
+      <div class="absolute -left-20 top-0 h-72 w-72 rounded-full bg-accent/20 blur-3xl dark:bg-accent/10"></div>
+      <div class="absolute right-0 top-40 h-80 w-80 rounded-full bg-mint/40 blur-3xl dark:bg-cyan-500/10"></div>
+      <div class="absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-amber-200/40 blur-3xl dark:bg-amber-400/10"></div>
+    </div>
+
+    <header class="relative z-10">
+      <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
+        <a href="index.html" class="flex items-center gap-3">
+          <div class="grid h-11 w-11 place-items-center rounded-2xl bg-ink text-lg font-bold text-white shadow-soft dark:bg-white dark:text-slate-900">Q</div>
+          <div>
+            <p class="font-heading text-lg font-bold">QSpark AI</p>
+            <p class="text-sm text-slate-600 dark:text-slate-300">CUET Mock Engine</p>
+          </div>
+        </a>
+
+        <div class="flex items-center gap-3">
+          <button id="themeToggle" type="button" class="rounded-full border border-white/60 bg-white/70 px-4 py-2 text-sm font-semibold text-ink backdrop-blur transition hover:-translate-y-0.5 hover:shadow-soft dark:border-slate-700 dark:bg-slate-900/70 dark:text-white">Toggle Theme</button>
+          <div id="auth-container">
+              <a href="login.html" class="rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 dark:bg-accent dark:text-slate-950">Login 👤</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main id="top" class="relative z-10">
+      <section class="mx-auto max-w-7xl px-4 pb-10 pt-2 sm:px-6 lg:px-8 lg:pb-16">
+        <div id="topBannerAd" class="ad-shell mb-6" aria-label="Top advertisement slot"></div>
+        <div class="grid items-center gap-10 overflow-hidden rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-soft backdrop-blur md:p-10 lg:grid-cols-[1.1fr_0.9fr] dark:border-slate-800 dark:bg-slate-900/80">
+          <div class="space-y-7">
+            <span class="inline-flex rounded-full border border-mint bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-700 dark:border-cyan-500/40 dark:bg-cyan-500/10 dark:text-cyan-200">
+              NTA Exam Pattern Aligned 🎯
+            </span>
+
+            <div class="space-y-4">
+              <h1 class="max-w-2xl font-heading text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+                Generate CUET Mocks in 10 Seconds <span class="text-accent">⚡</span>
+              </h1>
+              <p class="max-w-2xl text-lg leading-8 text-slate-600 dark:text-slate-300">
+                Generate highly probable 50-MCQ mock tests for CUET UG/PG across any subject. Practice smarter with step-by-step explanations.
+              </p>
+            </div>
+
+            <form id="heroForm" class="grid gap-4 rounded-[1.75rem] bg-sand p-4 sm:grid-cols-2 dark:bg-slate-950/60">
+              <label class="space-y-2 hidden">
+                <span class="text-sm font-semibold">Exam</span>
+                <select id="heroClass" class="input-field" name="class"><option value="CUET" selected>CUET</option></select>
+              </label>
+
+              <label class="space-y-2 sm:col-span-2">
+                <span class="text-sm font-semibold">Domain Subject</span>
+                <select id="heroSubject" class="input-field" name="subject" aria-label="Select subject"></select>
+              </label>
+
+              <label class="space-y-2 sm:col-span-2">
+                <span class="text-sm font-semibold">Syllabus Scope</span>
+                <input id="heroChapter" class="input-field" type="text" name="chapter" placeholder="e.g., Whole Syllabus, Macroeconomics..." autocomplete="off" required />
+              </label>
+
+              <button id="heroGenerateBtn" class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-ink px-5 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 sm:col-span-2 dark:bg-accent dark:text-slate-950" type="submit">
+                Generate CUET Mock <span class="transition group-hover:translate-x-1">→</span>
+              </button>
+            </form>
+
+            <div class="grid gap-3 text-sm text-slate-600 sm:grid-cols-3 dark:text-slate-300">
+              <div class="rounded-2xl bg-white/80 p-4 dark:bg-slate-950/60">
+                <p class="font-semibold text-ink dark:text-white">50 MCQs</p>
+                <p>NTA Standard Format</p>
+              </div>
+              <div class="rounded-2xl bg-white/80 p-4 dark:bg-slate-950/60">
+                <p class="font-semibold text-ink dark:text-white">Explanations</p>
+                <p>Step-by-step logic</p>
+              </div>
+              <div class="rounded-2xl bg-white/80 p-4 dark:bg-slate-950/60">
+                <p class="font-semibold text-ink dark:text-white">Chapter-wise</p>
+                <p>Target specific weak areas</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="absolute inset-0 translate-x-4 translate-y-4 rounded-[2rem] bg-ink/10 blur-2xl dark:bg-accent/10"></div>
+            <div class="relative overflow-hidden rounded-[2rem] border border-white/60 bg-gradient-to-br from-ink via-slate-800 to-slate-900 p-6 text-white shadow-soft dark:border-slate-700">
+              <div class="mb-6 flex items-center justify-between">
+                <div>
+                  <p class="text-sm uppercase tracking-[0.3em] text-white/60">Mock Preview</p>
+                  <h2 class="mt-2 font-heading text-2xl font-bold">CUET Standard Output</h2>
+                </div>
+                <span class="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold">AI Verified</span>
+              </div>
+
+              <div class="space-y-4">
+                <div class="rounded-2xl bg-white/10 p-4">
+                  <p class="text-xs uppercase tracking-[0.25em] text-mint">Question 1</p>
+                  <p class="mt-2 text-sm text-white/90">If the cash reserve ratio (CRR) is lowered by the RBI, its impact on credit creation will be to:</p>
+                  <ul class="mt-2 text-xs text-white/70 space-y-1">
+                    <li>A. Decrease it</li>
+                    <li>B. Increase it</li>
+                    <li>C. No impact</li>
+                    <li>D. None of the above</li>
+                  </ul>
+                  <div class="mt-3 p-2 bg-black/20 rounded">
+                    <p class="text-xs text-mint font-bold">Answer: B. Increase it</p>
+                    <p class="text-[10px] text-white/60 mt-1">Explanation: A lower CRR means banks hold less cash with RBI, leaving more funds available to lend, thereby increasing credit creation.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="generator" class="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+        <div class="grid gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
+          <aside class="rounded-[2rem] border border-white/70 bg-white/80 p-5 shadow-soft backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
+            <div class="mb-4 flex items-center justify-between">
+              <div>
+                <p class="text-sm font-semibold uppercase tracking-[0.2em] text-accent">Mock Builder</p>
+                <h2 class="mt-1 font-heading text-xl font-bold">Configure CUET Set</h2>
+              </div>
+            </div>
+
+            <form id="generatorForm" class="space-y-4 mt-5">
+              <select id="classSelect" class="hidden" name="class"><option value="CUET" selected>CUET</option></select>
+
+              <label class="space-y-2">
+                <span class="text-sm font-semibold">Domain Subject</span>
+                <select id="subjectSelect" class="input-field" name="subject" aria-label="Select subject"></select>
+              </label>
+
+              <label class="space-y-2">
+                <span class="text-sm font-semibold">Syllabus Scope</span>
+                <input id="chapterInput" class="input-field" type="text" name="chapter" placeholder="e.g., Whole Syllabus" autocomplete="off" required />
+              </label>
+
+              <div class="grid gap-3 sm:grid-cols-2">
+                <button id="generateBtn" class="rounded-2xl bg-ink px-4 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 dark:bg-accent dark:text-slate-950" type="submit">Generate</button>
+                <button id="regenerateBtn" class="rounded-2xl border border-slate-300 bg-white px-4 py-3 font-semibold text-ink transition hover:-translate-y-0.5 hover:border-ink dark:border-slate-700 dark:bg-slate-950 dark:text-white" type="button">Regenerate</button>
+              </div>
+            </form>
+
+            <div id="free-plan-banner" class="mt-6 rounded-[1.5rem] border border-amber-200 bg-amber-50/90 p-4 dark:border-amber-500/30 dark:bg-amber-500/10">
+              <div class="flex items-center justify-between gap-4">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.22em] text-amber-700 dark:text-amber-200">Credits</p>
+                  <h3 class="mt-1 font-heading text-xl font-bold">Daily generation limits</h3>
+                </div>
+                <span id="usageSummary" class="rounded-full bg-white px-3 py-2 text-sm font-semibold text-ink dark:bg-slate-900 dark:text-white">3 left today</span>
+              </div>
+              <p id="limitMessage" class="mt-3 text-sm leading-6 text-slate-700 dark:text-slate-200">Free users can generate up to 3 question sets each day.</p>
+              <a href="pricing.html" class="mt-4 inline-flex rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 dark:bg-white dark:text-slate-950">Upgrade to Pro</a>
+            </div>
+            
+            <div id="myNativeAdDiv" class="mt-6 w-full rounded-[1.5rem] overflow-hidden"></div>
+
+            <div class="mt-6 space-y-3 rounded-[1.5rem] bg-slate-100 p-4 dark:bg-slate-950/80">
+              <div class="flex items-center justify-between">
+                <p class="font-semibold">Quick Actions</p>
+                <span id="saveCount" class="text-sm text-slate-500 dark:text-slate-400">0 saved</span>
+              </div>
+              <div class="grid gap-3 sm:grid-cols-2">
+                <button id="copyAllBtn" type="button" class="secondary-button">Copy All</button>
+                <button id="downloadPdfBtn" type="button" class="secondary-button">Download PDF</button>
+                <button id="saveBtn" type="button" class="secondary-button">Save Result</button>
+                <button id="clearSavedBtn" type="button" class="secondary-button">Clear Saved</button>
+              </div>
+            </div>
+
+            <div id="sidebarAdSlot" class="ad-shell mt-6" aria-label="Sidebar advertisement"></div>
+
+            <div class="mt-6">
+              <div class="mb-3 flex items-center justify-between">
+                <h3 class="font-heading text-lg font-bold">Saved Mocks</h3>
+                <button id="refreshSavedBtn" type="button" class="text-sm font-semibold text-accent">Refresh</button>
+              </div>
+              <div id="savedList" class="space-y-3"></div>
+            </div>
+          </aside>
+
+          <section class="space-y-6">
+            <div class="rounded-[2rem] border border-white/70 bg-white/80 p-5 shadow-soft backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
+              <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p class="text-sm font-semibold uppercase tracking-[0.2em] text-accent">Results</p>
+                  <h2 class="mt-2 font-heading text-2xl font-bold">CUET Mock Test (50 MCQs)</h2>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <span id="statusBadge" class="rounded-full bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">Ready</span>
+                  <span id="metaBadge" class="rounded-full bg-mint/70 px-3 py-2 text-sm font-semibold text-ink dark:bg-cyan-500/20 dark:text-cyan-100">Waiting for input</span>
+                </div>
+              </div>
+
+              <div id="loadingState" class="mt-6 hidden rounded-[1.5rem] border border-accent/20 bg-accent/5 p-6 dark:border-accent/30 dark:bg-accent/10 transition-all">
+                <div class="flex items-center gap-5">
+                  <div class="ai-pulse h-12 w-12 rounded-full">
+                    <div class="ai-pulse-inner h-full w-full flex items-center justify-center font-bold text-accent">AI</div>
+                  </div>
+                  <div>
+                    <p class="font-heading font-bold text-lg text-ink dark:text-white">Synthesizing NTA pattern...</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-300">Generating 50 precise questions and detailed explanations.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div id="errorState" class="mt-6 hidden rounded-[1.5rem] border border-rose-200 bg-rose-50 p-5 dark:border-rose-500/30 dark:bg-rose-500/10">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <p id="errorTitle" class="font-heading text-xl font-bold">We could not complete this request</p>
+                    <p id="errorText" class="mt-2 max-w-2xl text-sm leading-6 text-slate-700 dark:text-slate-200">Try again in a moment.</p>
+                  </div>
+                  <button id="dismissErrorBtn" type="button" class="secondary-button compact-button">Dismiss</button>
+                </div>
+              </div>
+
+              <div id="emptyState" class="mt-6 rounded-[1.5rem] border border-dashed border-slate-300 bg-slate-50 p-8 text-center dark:border-slate-700 dark:bg-slate-950/80">
+                <p class="font-heading text-2xl font-bold">No mock generated yet</p>
+                <p class="mt-3 text-slate-600 dark:text-slate-300">Fill in the subject and syllabus scope to create a full 50-MCQ set.</p>
+              </div>
+
+              <div id="resultsPanel" class="mt-6 hidden space-y-6">
+                <article class="result-card">
+                  <div class="result-card-header">
+                    <div>
+                      <p class="result-label">CUET Section</p>
+                      <h3 class="font-heading text-2xl font-bold">Domain Specific MCQs</h3>
+                    </div>
+                    <button data-copy-section="mcqs" class="secondary-button compact-button" type="button">Copy All</button>
+                  </div>
+                  <div id="mcqList" class="space-y-4"></div>
+                </article>
+                <div id="mcqInterstitialAd" class="ad-shell hidden" aria-label="Advertisement"></div>
+                
+                <div id="shortList" class="hidden"></div>
+                <div id="longList" class="hidden"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="relative z-10 border-t border-white/60 py-8 dark:border-slate-800">
+      <div class="mx-auto flex max-w-7xl flex-col gap-3 px-4 text-sm text-slate-600 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8 dark:text-slate-300">
+        <p>QSpark AI helps students crack CUET and NEET faster.</p>
+      </div>
+    </footer>
+
+    <div id="bottomStickyAd" class="sticky-ad-shell ad-shell" aria-label="Bottom sticky advertisement"></div>
+    <div id="profile-overlay" onclick="toggleProfileSidebar()" class="fixed inset-0 z-[100] hidden bg-ink/40 backdrop-blur-sm transition-opacity duration-300 opacity-0"></div>
+    <div id="profile-sidebar" class="fixed inset-y-0 right-0 z-[101] w-full max-w-sm translate-x-full transform flex-col border-l border-white/60 bg-sand p-6 text-ink shadow-2xl transition-transform duration-300 dark:border-slate-800 dark:bg-slate-950 dark:text-white flex">
+        <div class="mb-6 flex items-center justify-between">
+            <h2 class="font-heading text-xl font-bold">My Workspace</h2>
+            <button onclick="toggleProfileSidebar()" class="rounded-full bg-white/50 p-2 text-ink hover:bg-white dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700 transition">✕</button>
+        </div>
+        <div class="mb-6 rounded-2xl bg-white p-5 shadow-soft dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+            <div class="flex items-center gap-4">
+                <img id="sidebar-avatar" src="https://ui-avatars.com/api/?name=User&background=1d2733&color=fff" class="h-14 w-14 rounded-full border-2 border-accent object-cover">
+                <div>
+                    <h3 id="sidebar-name" class="font-bold text-lg leading-tight">Guest User</h3>
+                    <p id="sidebar-email" class="text-xs text-slate-500 dark:text-slate-400">Please login</p>
+                    <div id="sidebar-plan-badge" class="mt-1 inline-block rounded-full bg-slate-200 px-2 py-0.5 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300">Free Plan</div>
+                </div>
+            </div>
+        </div>
+        <div class="mb-6 grid grid-cols-2 gap-3">
+            <div class="rounded-xl bg-white p-3 text-center shadow-sm dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+                <p class="text-xs font-semibold text-slate-500 uppercase">Limits Today</p>
+                <p id="sidebar-limits" class="font-heading text-xl font-bold text-accent">0</p>
+            </div>
+            <div class="rounded-xl bg-white p-3 text-center shadow-sm dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+                <p class="text-xs font-semibold text-slate-500 uppercase">Saved Sets</p>
+                <p id="sidebar-saved-count" class="font-heading text-xl font-bold text-mint dark:text-cyan-400">0</p>
+            </div>
+        </div>
+        <div class="flex-1 overflow-y-auto pr-2">
+            <h4 class="mb-3 text-sm font-bold uppercase tracking-wider text-slate-500">Recent Activity</h4>
+            <div id="sidebar-history-list" class="space-y-3"><p class="text-sm text-slate-500">No recent activity.</p></div>
+        </div>
+        <div class="mt-6 border-t border-slate-200 pt-4 dark:border-slate-800">
+            <a href="pricing.html" class="mt-4 inline-flex rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 dark:bg-white dark:text-slate-950">Upgrade Plan ⚡</a>
+            <button onclick="firebase.auth().signOut().then(() => window.location.reload())" class="flex w-full justify-center rounded-xl border border-rose-200 bg-rose-50 py-3 text-sm font-bold text-rose-600 transition hover:bg-rose-100 dark:border-rose-900/50 dark:bg-rose-900/20 dark:text-rose-400">Log Out</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script type="module">
+      import "./ads.js";
+      import "./app.js";
+      
+      // Auto set the dropdowns to CUET
+      setTimeout(() => {
+        if(document.getElementById('heroClass')) document.getElementById('heroClass').value = 'CUET';
+        if(document.getElementById('classSelect')) document.getElementById('classSelect').value = 'CUET';
+      }, 500);
+    </script>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDl6BATbzjeZaMdnC8eBXbdMcj1ainGVEE",
+            authDomain: "examspark-ca92a.firebaseapp.com",
+            projectId: "examspark-ca92a",
+            storageBucket: "examspark-ca92a.firebasestorage.app",
+            messagingSenderId: "503360136413",
+            appId: "1:503360136413:web:4676aa12cb47da06dd6734"
+        };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        window.db = firebase.firestore();
+        
+        window.qsparkPlan = "free"; 
+        window.isAdsFree = false;
+        window.currentUserUid = null;
+
+        function toggleProfileSidebar() {
+            const sidebar = document.getElementById('profile-sidebar');
+            const overlay = document.getElementById('profile-overlay');
+            if (sidebar.classList.contains('translate-x-full')) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => {
+                    overlay.classList.remove('opacity-0');
+                    sidebar.classList.remove('translate-x-full');
+                }, 10);
+                updateSidebarHistory(); 
+            } else {
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        }
+
+        function updateSidebarHistory() {
+            try {
+                const savedResults = JSON.parse(localStorage.getItem('qspark-ai-saved-results')) || [];
+                document.getElementById('sidebar-saved-count').innerText = savedResults.length;
+                const historyList = document.getElementById('sidebar-history-list');
+                if(savedResults.length === 0) {
+                    historyList.innerHTML = '<p class="text-sm text-slate-500">No saved sets yet.</p>'; return;
+                }
+                historyList.innerHTML = savedResults.slice(0, 5).map(item => `
+                    <div class="rounded-xl border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-800 dark:bg-slate-900 cursor-pointer hover:border-accent transition">
+                        <p class="text-xs font-bold text-accent">${item.input.className}</p>
+                        <p class="text-sm font-semibold text-ink dark:text-white truncate">${item.input.chapter}</p>
+                        <p class="text-xs text-slate-500 mt-1">${item.input.subject}</p>
+                    </div>
+                `).join('');
+            } catch(e) { console.error(e); }
+        }
+
+        firebase.auth().onAuthStateChanged((user) => {
+            const authContainer = document.getElementById("auth-container");
+            if (user) {
+                window.currentUserUid = user.uid;
+                const photoUrl = user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || 'U'}&background=1d2733&color=fff`;
+                authContainer.innerHTML = `<button onclick="toggleProfileSidebar()" class="overflow-hidden rounded-full border-2 border-transparent transition hover:border-accent focus:outline-none"><img src="${photoUrl}" class="h-10 w-10 object-cover" alt="Profile"></button>`;
+                document.getElementById('sidebar-name').innerText = user.displayName || "Scholar";
+                document.getElementById('sidebar-email').innerText = user.email || user.phoneNumber || "";
+                document.getElementById('sidebar-avatar').src = photoUrl;
+
+                window.db.collection("users").doc(user.uid).get().then((doc) => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        let badgeColor = "bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300";
+                        let planName = "Free Plan";
+                        if (data.currentPlan === 'infinity' || data.qsparkPlan === 'pro' || data.qsparkPlan === 'yearly') {
+                            window.qsparkPlan = "pro"; window.isAdsFree = true; planName = "Premium ⚡"; badgeColor = "bg-accent/20 text-accent dark:bg-accent/10"; document.getElementById('sidebar-limits').innerText = "Unlimited";
+                        } else if (data.qsparkPlan === 'ads_free') {
+                            window.isAdsFree = true; planName = "Ads Free"; document.getElementById('sidebar-limits').innerText = "3 (Ads Free)";
+                        } else {
+                            try { const usage = JSON.parse(localStorage.getItem('qspark-ai-daily-usage')) || { count: 0 }; document.getElementById('sidebar-limits').innerText = Math.max(0, 3 - usage.count); } catch(e) {}
+                        }
+                        const badge = document.getElementById('sidebar-plan-badge');
+                        badge.innerText = planName; badge.className = `mt-1 inline-block rounded-full px-2 py-0.5 text-xs font-bold ${badgeColor}`;
+                        window.dispatchEvent(new Event('planLoaded'));
+                    }
+                });
+            } else {
+                window.currentUserUid = null;
+                authContainer.innerHTML = `<a href="login.html" class="rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-accent dark:text-slate-950">Login 👤</a>`;
+            }
+        });
+    </script>
+  </body>
+</html>
